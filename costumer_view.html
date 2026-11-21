@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zidas Coffee® — Next-Gen Brew & Matcha Bar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #09090b;
+            background-image: radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.06), transparent 25%),
+                              radial-gradient(circle at 85% 30%, rgba(244, 63, 94, 0.06), transparent 25%);
+        }
+        /* Efek Kartu Member VIP */
+        .vip-card {
+            background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #18181b 100%);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            box-shadow: 0 20px 50px -15px rgba(16, 185, 129, 0.25);
+        }
+        /* Efek Sobekan Tiket Voucher */
+        .ticket-cutout {
+            position: relative;
+        }
+        .ticket-cutout::before, .ticket-cutout::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #09090b;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .ticket-cutout::before { left: -10px; border-right: 1px solid #27272a; }
+        .ticket-cutout::after { right: -10px; border-left: 1px solid #27272a; }
+    </style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="text-zinc-100 antialiased min-h-screen flex flex-col justify-between selection:bg-rose-500 selection:text-white">
+
+    <!-- ==========================================
+         1. NAVBAR PREMIUM ZIDAS COFFEE
+    =========================================== -->
+    <nav class="bg-zinc-950/85 backdrop-blur-xl sticky top-0 z-40 border-b border-zinc-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Brand Logo -->
+                <button onclick="bukaHalaman('beranda')" class="flex items-center gap-3 group text-left">
+                    <div class="bg-gradient-to-br from-emerald-400 via-emerald-500 to-rose-500 p-2.5 rounded-2xl shadow-lg shadow-emerald-500/20 group-hover:rotate-6 transition duration-300">
+                        <i class="fa-solid fa-mug-hot text-zinc-950 text-xl"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-extrabold text-xl tracking-wider text-white leading-none">
+                            ZIDAS<span class="text-rose-400">COFFEE</span><span class="text-emerald-400 text-sm align-top">®</span>
+                        </span>
+                        <span class="text-[10px] uppercase tracking-[0.25em] text-emerald-400 font-bold mt-1">
+                            Artisan Brew & Matcha
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Menu Navigasi Desktop -->
+                <div class="hidden lg:flex items-center space-x-7">
+                    <button id="nav-beranda" onclick="bukaHalaman('beranda')" class="nav-btn text-emerald-400 font-bold border-b-2 border-rose-500 pb-1 transition text-sm">Beranda</button>
+                    <button id="nav-menu" onclick="bukaHalaman('menu')" class="nav-btn text-zinc-400 hover:text-white font-semibold pb-1 transition text-sm">Pesan Menu</button>
+                    <button id="nav-promo" onclick="bukaHalaman('promo')" class="nav-btn text-zinc-400 hover:text-white font-semibold pb-1 transition text-sm flex items-center gap-1.5">
+                        <span>Promo & Voucher</span>
+                        <span class="bg-rose-500 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full animate-pulse">BARU</span>
+                    </button>
+                    <button id="nav-outlet" onclick="bukaHalaman('outlet')" class="nav-btn text-zinc-400 hover:text-white font-semibold pb-1 transition text-sm">Outlet Kami</button>
+                    <button id="nav-member" onclick="bukaHalaman('member')" class="nav-btn text-zinc-400 hover:text-white font-semibold pb-1 transition text-sm">Kartu Member</button>
+                </div>
+
+                <!-- Tombol Aksi Kanan -->
+                <div class="flex items-center gap-3">
+                    <!-- Koin Badge -->
+                    <button onclick="bukaHalaman('member')" class="hidden sm:flex items-center gap-1.5 bg-zinc-900 border border-amber-500/30 px-3 py-2 rounded-xl text-xs font-bold text-amber-400 hover:bg-zinc-800 transition" title="Koin Zidas Kamu">
+                        <i class="fa-solid fa-coins"></i>
+                        <span id="nav-coin-count">0 Koin</span>
+                    </button>
+
+                    <!-- Tombol Keranjang -->
+                    <button onclick="bukaHalaman('menu')" class="relative p-2.5 text-zinc-200 hover:text-emerald-400 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-xl transition">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md shadow-rose-500/40">0</span>
+                    </button>
+
+                    <!-- Area Akun Google -->
+                    <div id="auth-area">
+                        <button onclick="bukaModalGoogle()" class="inline-flex items-center gap-2 bg-white hover:bg-zinc-200 text-zinc-950 text-xs font-extrabold px-3.5 py-2.5 rounded-xl shadow-md transition">
+                            <i class="fa-brands fa-google text-rose-500 text-sm"></i>
+                            <span>Masuk Google</span>
+                        </button>
+                    </div>
+
+                    <!-- Tombol Pengelola / Admin -->
+                    <button onclick="bukaHalaman('admin')" class="p-2.5 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-zinc-950 border border-emerald-500/30 rounded-xl transition" title="Dashboard Pengelola / Barista">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ==========================================
+         2. HALAMAN BERANDA (LANDING PAGE EKSKLUSIF)
+    =========================================== -->
+    <main id="page-beranda" class="page-section flex-1">
+        <section class="relative py-14 lg:py-20 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Banner Notifikasi Pengguna Baru Google -->
+                <div id="new-user-banner" class="mb-10 bg-gradient-to-r from-zinc-900 via-zinc-900 to-rose-950/40 border border-rose-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Klaim Bonus Pengguna Baru: 150 Koin + Voucher Diskon 50%!</h4>
+                            <p class="text-xs text-zinc-400">Masuk menggunakan akun Google pribadimu sekarang untuk membuka akses Member VIP Zidas Coffee.</p>
+                        </div>
+                    </div>
+                    <button onclick="bukaModalGoogle()" class="shrink-0 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-rose-500/20 transition">
+                        Login Google Sekarang ➔
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <!-- Kiri: Headline & Quick Action Mode -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            Smart Ordering System • Pilih Cara Nikmatimu
+                        </div>
+
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.15] tracking-tight">
+                            Racik Kopimu Sendiri, <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-rose-400">Nikmati Tanpa Batas.</span>
+                        </h1>
+
+                        <p class="text-zinc-400 text-base max-w-xl leading-relaxed">
+                            Lebih dari sekadar kedai kopi biasa. Atur takaran gula dan es sesukamu, pilih layanan **Makan di Tempat**, **Bawa Pulang**, atau **Antar ke Rumah**, dan kumpulkan koin di setiap tegukan.
+                        </p>
+
+                        <!-- 3 Kartu Pilihan Layanan Cepat -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                            <button onclick="pilihModeDariBeranda('Dine-In')" class="bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 hover:border-emerald-500/50 p-4 rounded-2xl text-left transition group">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-utensils"></i>
+                                </div>
+                                <h3 class="font-bold text-white text-sm">Makan di Sini</h3>
+                                <p class="text-[11px] text-zinc-400 mt-0.5">Pilih nomor meja & pesan tanpa antre kasir.</p>
+                            </button>
+
+                            <button onclick="pilihModeDariBeranda('Takeaway')" class="bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 hover:border-rose-500/50 p-4 rounded-2xl text-left transition group">
+                                <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-bag-shopping"></i>
+                                </div>
+                                <h3 class="font-bold text-white text-sm">Bawa Pulang</h3>
+                                <p class="text-[11px] text-zinc-400 mt-0.5">Ambil cepat di outlet dalam 5 menit.</p>
+                            </button>
+
+                            <button onclick="pilihModeDariBeranda('Delivery')" class="bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 hover:border-emerald-500/50 p-4 rounded-2xl text-left transition group">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-motorcycle"></i>
+                                </div>
+                                <h3 class="font-bold text-white text-sm">Antar ke Rumah</h3>
+                                <p class="text-[11px] text-zinc-400 mt-0.5">Kurir Zidas antar langsung ke lokasimu.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kanan: Visual Kartu VIP & Signature Drink -->
+                    <div class="lg:col-span-5">
+                        <div class="vip-card rounded-3xl p-6 relative overflow-hidden">
+                            <div class="absolute -right-12 -top-12 w-40 h-40 bg-emerald-500/20 rounded-full blur-2xl"></div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-xs font-extrabold tracking-widest text-rose-400 uppercase">Zidas Signature</span>
+                                <span class="bg-emerald-500 text-zinc-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full">CUSTOMIZABLE</span>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=800&q=80" alt="Pink Matcha" class="w-full h-56 object-cover rounded-2xl mb-4 border border-zinc-800">
+                            <h3 class="text-xl font-extrabold text-white">Velvet Rose Uji Matcha</h3>
+                            <p class="text-xs text-zinc-400 mt-1">Perpaduan matcha premium dengan krim mawar merah muda dan susu segar.</p>
+                            <div class="mt-5 pt-4 border-t border-zinc-800 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] text-zinc-500 block">Harga Mulai</span>
+                                    <span class="text-lg font-extrabold text-emerald-400">Rp 15.000</span>
+                                </div>
+                                <button onclick="bukaHalaman('menu')" class="bg-gradient-to-r from-emerald-500 to-rose-500 text-zinc-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg hover:opacity-90 transition">
+                                    Racik Sekarang ➔
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- ==========================================
+         3. HALAMAN PESAN MENU + CUSTOMIZER + CHECKOUT
+    =========================================== -->
+    <main id="page-menu" class="page-section hidden flex-1 py-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Kolom Kiri: Filter & Katalog Menu -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-5">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Katalog Menu Zidas</h1>
+                        <p class="text-xs text-zinc-400 mt-1">Klik "Racik & Tambah" untuk mengatur takaran gula, es, dan topping.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterMenu('all', this)" class="filter-btn bg-emerald-500 text-zinc-950 font-bold px-3.5 py-1.5 rounded-xl text-xs transition">Semua</button>
+                        <button onclick="filterMenu('coffee', this)" class="filter-btn bg-zinc-900 text-zinc-300 border border-zinc-800 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition">Coffee</button>
+                        <button onclick="filterMenu('non-coffee', this)" class="filter-btn bg-zinc-900 text-zinc-300 border border-zinc-800 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition">Matcha & Pink</button>
+                        <button onclick="filterMenu('bundling', this)" class="filter-btn bg-zinc-900 text-zinc-300 border border-zinc-800 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition">Bundling</button>
+                    </div>
+                </div>
+
+                <!-- Grid Kartu Produk -->
+                <div id="katalog-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+            </div>
+
+            <!-- Kolom Kanan: Panel Layanan & Keranjang -->
+            <div class="lg:col-span-4">
+                <div class="bg-zinc-900/95 border border-zinc-800 rounded-3xl p-6 space-y-5 sticky top-24 shadow-2xl">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-4">
+                        <h3 class="font-extrabold text-base text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bag-shopping text-rose-400"></i>
+                            <span>Detail Pesanan</span>
+                        </h3>
+                        <span id="outlet-terpilih-badge" class="text-[10px] bg-zinc-950 border border-zinc-800 text-emerald-400 px-2.5 py-1 rounded-lg font-bold">
+                            📍 Outlet Pusat
+                        </span>
+                    </div>
+
+                    <!-- Switcher 3 Mode Layanan -->
+                    <div>
+                        <label class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mb-2 block">Metode Layanan</label>
+                        <div class="grid grid-cols-3 gap-2 bg-zinc-950 p-1.5 rounded-2xl border border-zinc-800">
+                            <button type="button" onclick="ubahModeLayanan('Dine-In')" id="mode-dinein" class="mode-btn bg-emerald-500 text-zinc-950 font-extrabold text-xs py-2 rounded-xl transition">Makan Sini</button>
+                            <button type="button" onclick="ubahModeLayanan('Takeaway')" id="mode-takeaway" class="mode-btn text-zinc-400 hover:text-white font-semibold text-xs py-2 rounded-xl transition">Bawa Pulang</button>
+                            <button type="button" onclick="ubahModeLayanan('Delivery')" id="mode-delivery" class="mode-btn text-zinc-400 hover:text-white font-semibold text-xs py-2 rounded-xl transition">Antar Rumah</button>
+                        </div>
+                    </div>
+
+                    <!-- Form Dinamis Berdasarkan Mode Layanan -->
+                    <div id="box-info-layanan" class="bg-zinc-950 border border-zinc-800/80 p-3.5 rounded-2xl space-y-2.5">
+                        <!-- Diisi otomatis via JS -->
+                    </div>
+
+                    <!-- Daftar Item di Keranjang -->
+                    <div id="cart-list" class="space-y-2.5 max-h-52 overflow-y-auto pr-1">
+                        <p class="text-xs text-zinc-500 text-center py-6">Belum ada minuman dipilih.</p>
+                    </div>
+
+                    <!-- Pilih Voucher Diskon -->
+                    <div class="pt-3 border-t border-zinc-800 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-zinc-300"><i class="fa-solid fa-ticket text-rose-400 mr-1"></i>Voucher Diskon</label>
+                            <button onclick="bukaHalaman('promo')" class="text-[11px] text-emerald-400 hover:underline font-semibold">Cari Promo ➔</button>
+                        </div>
+                        <select id="dropdown-voucher" onchange="kalkulasiTotal()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                            <option value="0">-- Tidak Pakai Voucher --</option>
+                        </select>
+                    </div>
+
+                    <!-- Opsi Tukar Koin -->
+                    <div class="flex items-center justify-between bg-amber-500/5 border border-amber-500/20 p-3 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-coins text-amber-400"></i>
+                            <div>
+                                <p class="text-xs font-bold text-white">Gunakan Koin Zidas</p>
+                                <p class="text-[10px] text-zinc-400" id="info-koin-tukar">Saldo: 0 Koin (1 Koin = Rp 100)</p>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="toggle-pakai-koin" onchange="kalkulasiTotal()" class="w-4 h-4 accent-emerald-500 rounded cursor-pointer">
+                    </div>
+
+                    <!-- Rincian Biaya -->
+                    <div class="space-y-1.5 pt-3 border-t border-zinc-800 text-xs">
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Subtotal Menu</span>
+                            <span id="teks-subtotal">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Biaya Pengantaran</span>
+                            <span id="teks-ongkir">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-rose-400">
+                            <span>Potongan Voucher & Koin</span>
+                            <span id="teks-diskon">- Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-base font-extrabold text-white pt-2 border-t border-zinc-800">
+                            <span>Total Bayar</span>
+                            <span id="teks-total" class="text-emerald-400">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <button onclick="kirimPesananFinal()" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-zinc-950 font-extrabold py-3.5 rounded-xl shadow-lg shadow-emerald-500/20 transition text-sm">
+                        Pesan & Bayar Sekarang
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- ==========================================
+         4. HALAMAN PROMO & VOUCHER DISKON
+    =========================================== -->
+    <main id="page-promo" class="page-section hidden flex-1 py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+            <span class="text-rose-400 font-bold text-xs uppercase tracking-widest">Zidas Rewards & Deals</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white">Klaim Voucher & Promo Spesial</h1>
+            <p class="text-zinc-400 text-sm">Klik "Klaim Voucher" untuk menyimpannya ke dompet akunmu dan gunakan saat checkout!</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="daftar-voucher-container">
+            <!-- Dirender via JS -->
+        </div>
+    </main>
+
+
+    <!-- ==========================================
+         5. HALAMAN OUTLET ZIDAS COFFEE
+    =========================================== -->
+    <main id="page-outlet" class="page-section hidden flex-1 py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-zinc-800 pb-6">
+            <div>
+                <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Lokasi & Cabang</span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Outlet Zidas Coffee</h1>
+                <p class="text-zinc-400 text-sm mt-1">Pilih outlet terdekat untuk layanan Makan di Sini, Bawa Pulang, atau Pengantaran.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="daftar-outlet-container">
+            <!-- Dirender via JS -->
+        </div>
+    </main>
+
+
+    <!-- ==========================================
+         6. HALAMAN KARTU MEMBER DIGITAL (VIP)
+    =========================================== -->
+    <main id="page-member" class="page-section hidden flex-1 py-12 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div class="text-center space-y-2">
+            <h1 class="text-3xl font-extrabold text-white">Zidas VIP Membership</h1>
+            <p class="text-zinc-400 text-sm">Tunjukkan kartu digital ini di kasir outlet atau kumpulkan koin dari setiap pesanan online.</p>
+        </div>
+
+        <!-- Tampilan Kartu Member 3D -->
+        <div class="vip-card rounded-3xl p-8 max-w-lg mx-auto relative overflow-hidden">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <span class="text-xs font-extrabold tracking-widest text-emerald-400 uppercase">ZIDAS COFFEE® CLUB</span>
+                    <h2 id="card-member-tier" class="text-2xl font-extrabold text-white mt-1">GUEST MEMBER</h2>
+                </div>
+                <i class="fa-solid fa-wifi rotate-90 text-zinc-500 text-xl"></i>
+            </div>
+
+            <div class="flex justify-between items-end">
+                <div class="space-y-1">
+                    <p class="text-[10px] uppercase tracking-widest text-zinc-400">Nama Pemegang Kartu</p>
+                    <p id="card-member-name" class="text-lg font-bold text-white">Belum Login Google</p>
+                    <p id="card-member-email" class="text-xs text-rose-400">Silakan masuk untuk klaim 150 Koin</p>
+                </div>
+                <div class="bg-white p-2 rounded-xl">
+                    <i class="fa-solid fa-qrcode text-zinc-950 text-4xl"></i>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-zinc-800/80 flex justify-between items-center">
+                <span class="text-xs text-zinc-400">Saldo Koin Aktif:</span>
+                <span id="card-member-coins" class="text-xl font-extrabold text-amber-400">0 Koin 🪙</span>
+            </div>
+        </div>
+
+        <div class="text-center" id="member-cta-box">
+            <button onclick="bukaModalGoogle()" class="bg-white hover:bg-zinc-200 text-zinc-950 font-extrabold px-6 py-3.5 rounded-xl shadow-lg inline-flex items-center gap-2 transition">
+                <i class="fa-brands fa-google text-rose-500"></i>
+                <span>Masuk dengan Akun Google (+150 Koin)</span>
+            </button>
+        </div>
+    </main>
+
+
+    <!-- ==========================================
+         7. DASHBOARD PENGELOLA / ADMIN BARISTA
+    =========================================== -->
+    <main id="page-admin" class="page-section hidden flex-1 py-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Zidas POS & Kitchen Display</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Dashboard Barista & Pengelola</h1>
+                <p class="text-zinc-400 text-xs sm:text-sm mt-1">Pantau pesanan masuk lengkap dengan detail racikan gula/es dan tipe layanan pelanggan.</p>
+            </div>
+            <button onclick="bukaHalaman('beranda')" class="bg-zinc-950 border border-zinc-800 text-zinc-300 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition">
+                Kembali ke Toko ➔
+            </button>
+        </div>
+
+        <!-- Statistik Omzet -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
+                <span class="text-zinc-400 text-xs font-semibold">Total Pendapatan Bersih</span>
+                <h3 id="admin-omzet" class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-2">Rp 0</h3>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
+                <span class="text-zinc-400 text-xs font-semibold">Pesanan Masuk</span>
+                <h3 id="admin-jumlah-order" class="text-2xl sm:text-3xl font-extrabold text-white mt-2">0 Pesanan</h3>
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl">
+                <span class="text-zinc-400 text-xs font-semibold">Member Google Terdaftar</span>
+                <h3 id="admin-jumlah-member" class="text-2xl sm:text-3xl font-extrabold text-rose-400 mt-2">0 Member</h3>
+            </div>
+        </div>
+
+        <!-- Tabel Antrean Pesanan Barista -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-fire-burner text-rose-400"></i>
+                <span>Antrean Pesanan Barista (Real-Time)</span>
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-zinc-300">
+                    <thead class="bg-zinc-950 text-zinc-400 uppercase text-xs border-b border-zinc-800">
+                        <tr>
+                            <th class="p-3.5">Order ID</th>
+                            <th class="p-3.5">Pelanggan & Layanan</th>
+                            <th class="p-3.5">Detail Racikan Menu</th>
+                            <th class="p-3.5">Total Bayar</th>
+                            <th class="p-3.5">Status</th>
+                            <th class="p-3.5 text-center">Aksi Barista</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tabel-order" class="divide-y divide-zinc-800"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- ==========================================
+         8. MODAL CUSTOM RACIKAN MINUMAN (BARISTA CUSTOMIZER)
+    =========================================== -->
+    <div id="modal-customizer" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-950 border-b border-zinc-800 flex justify-between items-center">
+                <h3 class="font-bold text-white text-base" id="cust-nama-produk">Racik Minuman</h3>
+                <button onclick="tutupModalCustomizer()" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-6 space-y-5">
+                <!-- Takaran Gula -->
+                <div>
+                    <label class="text-xs font-bold text-zinc-400 uppercase block mb-2">Takaran Gula (Sugar Level)</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="sugar" value="Normal Sugar" checked class="peer hidden">
+                            <div class="text-center py-2 px-2 rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-semibold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 peer-checked:text-emerald-400">Normal</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="sugar" value="Less Sugar" class="peer hidden">
+                            <div class="text-center py-2 px-2 rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-semibold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 peer-checked:text-emerald-400">Less Sugar</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="sugar" value="No Sugar" class="peer hidden">
+                            <div class="text-center py-2 px-2 rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-semibold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/10 peer-checked:text-emerald-400">No Sugar</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Level Es -->
+                <div>
+                    <label class="text-xs font-bold text-zinc-400 uppercase block mb-2">Takaran Es (Ice Level)</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="ice" value="Normal Ice" checked class="peer hidden">
+                            <div class="text-center py-2 rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-semibold peer-checked:border-rose-500 peer-checked:bg-rose-500/10 peer-checked:text-rose-400">Normal Ice</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="ice" value="Less Ice" class="peer hidden">
+                            <div class="text-center py-2 rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-semibold peer-checked:border-rose-500 peer-checked:bg-rose-500/10 peer-checked:text-rose-400">Less Ice</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Extra Topping -->
+                <div>
+                    <label class="text-xs font-bold text-zinc-400 uppercase block mb-2">Extra Topping (Opsional)</label>
+                    <select id="cust-topping" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <option value="Tanpa Topping|0">Tanpa Extra Topping (+Rp 0)</option>
+                        <option value="Oat Milk Upgrade|4000">Ganti Susu Oat Milk (+Rp 4.000)</option>
+                        <option value="Extra Espresso Shot|3000">Extra 1 Shot Espresso (+Rp 3.000)</option>
+                        <option value="Pink Rose Jelly|3000">Pink Rose Jelly (+Rp 3.000)</option>
+                    </select>
+                </div>
+
+                <button onclick="simpanRacikanKeKeranjang()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-extrabold py-3 rounded-xl transition text-sm">
+                    Tambahkan ke Keranjang
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         9. MODAL LOGIN AKUN GOOGLE (SIMULASI OAUTH)
+    =========================================== -->
+    <div id="modal-google" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-5 relative">
+            <button onclick="tutupModalGoogle()" class="absolute top-4 right-4 text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <div class="flex items-center gap-3 border-b border-zinc-800 pb-4">
+                <i class="fa-brands fa-google text-2xl text-rose-500"></i>
+                <div>
+                    <h3 class="font-bold text-white text-base">Sign in with Google</h3>
+                    <p class="text-[11px] text-zinc-400">Lanjutkan ke Zidas Coffee® VIP Member</p>
+                </div>
+            </div>
+
+            <div class="bg-emerald-500/10 border border-emerald-500/30 p-3 rounded-xl text-xs text-emerald-300 flex items-center gap-2.5">
+                <i class="fa-solid fa-gift text-lg text-emerald-400"></i>
+                <span>Pengguna baru otomatis mendapatkan <strong>150 Koin Zidas (Senilai Rp 15.000)</strong>!</span>
+            </div>
+
+            <form onsubmit="eksekusiLoginGoogle(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs text-zinc-400 block mb-1">Nama Lengkap Akun Google</label>
+                    <input type="text" id="google-nama" required placeholder="Cth: Zida Pratama" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="text-xs text-zinc-400 block mb-1">Alamat Gmail</label>
+                    <input type="email" id="google-email" required placeholder="nama@gmail.com" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <button type="submit" class="w-full bg-white hover:bg-zinc-200 text-zinc-950 font-extrabold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg mt-2">
+                    <i class="fa-brands fa-google text-rose-500"></i>
+                    <span>Konfirmasi & Klaim 150 Koin</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+    <footer class="bg-zinc-950 border-t border-zinc-900 py-6 text-center text-zinc-500 text-xs mt-auto">
+        <p>&copy; 2026 <span class="text-white font-bold">Zidas<span class="text-rose-400">Coffee</span>®</span> — Smart F&B Entrepreneurship Platform.</p>
+    </footer>
+
+
+    <!-- ==========================================
+         10. JAVASCRIPT ENGINE
+    =========================================== -->
+    <script>
+        // Data Menu
+        const daftarMenu = [
+            { id: 1, nama: "Zidas Aren Signature", kategori: "coffee", harga: 12000, stok: 20, gambar: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80", desc: "Espresso house blend + susu creamy + gula aren organik." },
+            { id: 2, nama: "Velvet Rose Uji Matcha", kategori: "non-coffee", harga: 15000, stok: 15, gambar: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=600&q=80", desc: "Pure Uji Matcha dengan lapisan selai stroberi mawar." },
+            { id: 3, nama: "Emerald Kyoto Matcha", kategori: "non-coffee", harga: 14000, stok: 18, gambar: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80", desc: "Matcha autentik dikocok segar dengan susu UHT dingin." },
+            { id: 4, nama: "Pink Berry Americano", kategori: "coffee", harga: 13000, stok: 12, gambar: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", desc: "Double shot espresso dengan infusi buah beri segar." },
+            { id: 5, nama: "Paket Couple Emerald & Rose", kategori: "bundling", harga: 24000, stok: 10, gambar: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80", desc: "1 Zidas Aren Signature + 1 Velvet Rose Matcha (Hemat 3K)." }
+        ];
+
+        // Data Voucher Promo
+        const daftarVoucher = [
+            { kode: "NEWMEMBER50", judul: "Diskon Pengguna Baru 50%", potong: 7000, ket: "Khusus member yang sudah login akun Google.", diklaim: false },
+            { kode: "ZIDASHEMAT", judul: "Potongan Langsung Rp 4.000", potong: 4000, ket: "Berlaku untuk semua menu kopi & matcha.", diklaim: false },
+            { kode: "ONGKIRGRATIS", judul: "Gratis Ongkir Antar Rumah", potong: 5000, ket: "Potongan biaya pengantaran kurir Zidas.", diklaim: false }
+        ];
+
+        // Data Outlet
+        const daftarOutlet = [
+            { nama: "Zidas Coffee — Pusat Kampus/Sekolah", alamat: "pasar 7 tembung ", status: "Buka • Sepi", warna: "emerald" },
+            { nama: "Zidas Hub — Perpustakaan & Co-Working", alamat: "kesawan", status: "Buka • Ramai Lancar", warna: "amber" },
+            { nama: "Zidas Express — Taman Kota & Stadion", alamat: "gatsu (Drive-Thru & Delivery)", status: "Buka • Siap Antar", warna: "emerald" }
+        ];
+
+        // State Aplikasi
+        let userGoogle = null;
+        let keranjang = [];
+        let pesananMasuk = [];
+        let modeLayanan = 'Dine-In';
+        let outletAktif = daftarOutlet[0].nama;
+        let produkSedangDiracik = null;
+
+        function formatRp(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+
+        // Navigasi Halaman
+        function bukaHalaman(page) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('page-' + page).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-emerald-400', 'font-bold', 'border-b-2', 'border-rose-500');
+                btn.classList.add('text-zinc-400', 'font-semibold');
+            });
+            const nav = document.getElementById('nav-' + page);
+            if(nav) {
+                nav.classList.remove('text-zinc-400', 'font-semibold');
+                nav.classList.add('text-emerald-400', 'font-bold', 'border-b-2', 'border-rose-500');
+            }
+
+            if(page === 'menu') { renderKatalog(); ubahModeLayanan(modeLayanan); }
+            if(page === 'promo') renderHalamanPromo();
+            if(page === 'outlet') renderHalamanOutlet();
+            if(page === 'admin') renderAdmin();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function pilihModeDariBeranda(mode) {
+            modeLayanan = mode;
+            bukaHalaman('menu');
+        }
+
+        // Login Akun Google
+        function bukaModalGoogle() { document.getElementById('modal-google').classList.remove('hidden'); }
+        function tutupModalGoogle() { document.getElementById('modal-google').classList.add('hidden'); }
+
+        function eksekusiLoginGoogle(e) {
+            e.preventDefault();
+            const nama = document.getElementById('google-nama').value;
+            const email = document.getElementById('google-email').value;
+
+            userGoogle = {
+                nama: nama,
+                email: email,
+                koin: 150, // Bonus besar pengguna baru!
+                tier: "EMERALD VIP"
+            };
+
+            // Otomatis buka voucher khusus member baru
+            daftarVoucher[0].diklaim = true;
+            updateDropdownVoucher();
+
+            // Update Navbar & Kartu Member
+            document.getElementById('auth-area').innerHTML = `
+                <button onclick="bukaHalaman('member')" class="flex items-center gap-2 bg-zinc-900 border border-emerald-500/40 px-3 py-1.5 rounded-xl hover:bg-zinc-800 transition">
+                    <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-400 to-rose-500 text-zinc-950 font-extrabold flex items-center justify-center text-xs">
+                        ${nama.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="text-xs font-bold text-white hidden sm:inline">${nama.split(' ')[0]}</span>
+                </button>
+            `;
+            document.getElementById('new-user-banner').classList.add('hidden');
+            updateInfoKoinUI();
+            tutupModalGoogle();
+            alert(`Selamat datang, ${nama}! Akun Google terhubung. Kamu mendapatkan Bonus 150 Koin + Voucher Diskon Pengguna Baru!`);
+        }
+
+        function updateInfoKoinUI() {
+            const koin = userGoogle ? userGoogle.koin : 0;
+            document.getElementById('nav-coin-count').innerText = `${koin} Koin`;
+            document.getElementById('info-koin-tukar').innerText = `Saldo: ${koin} Koin (Senilai ${formatRp(koin * 100)})`;
+            
+            if(userGoogle) {
+                document.getElementById('card-member-tier').innerText = userGoogle.tier;
+                document.getElementById('card-member-name').innerText = userGoogle.nama;
+                document.getElementById('card-member-email').innerText = userGoogle.email;
+                document.getElementById('card-member-coins').innerText = `${userGoogle.koin} Koin 🪙`;
+                document.getElementById('member-cta-box').classList.add('hidden');
+            }
+        }
+
+        // Katalog & Customizer Minuman
+        function renderKatalog(filter = 'all') {
+            const grid = document.getElementById('katalog-grid');
+            grid.innerHTML = '';
+            const items = filter === 'all' ? daftarMenu : daftarMenu.filter(m => m.kategori === filter);
+
+            items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-zinc-900/90 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-rose-500/40 transition group">
+                        <div>
+                            <div class="relative h-44 overflow-hidden">
+                                <img src="${item.gambar}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                <span class="absolute top-3 right-3 bg-zinc-950/85 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                                    Stok: ${item.stok}
+                                </span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-white text-base">${item.nama}</h3>
+                                <p class="text-zinc-400 text-xs mt-1 leading-relaxed">${item.desc}</p>
+                            </div>
+                        </div>
+                        <div class="p-4 pt-0 flex items-center justify-between border-t border-zinc-800/60 mt-2">
+                            <span class="text-base font-extrabold text-rose-400">${formatRp(item.harga)}</span>
+                            <button onclick="bukaCustomizer(${item.id})" class="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-extrabold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-sliders"></i>
+                                <span>Racik & Tambah</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterMenu(kat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.className = "filter-btn bg-zinc-900 text-zinc-300 border border-zinc-800 font-semibold px-3.5 py-1.5 rounded-xl text-xs transition");
+            btn.className = "filter-btn bg-emerald-500 text-zinc-950 font-bold px-3.5 py-1.5 rounded-xl text-xs transition";
+            renderKatalog(kat);
+        }
+
+        function bukaCustomizer(id) {
+            produkSedangDiracik = daftarMenu.find(p => p.id === id);
+            document.getElementById('cust-nama-produk').innerText = `Racik: ${produkSedangDiracik.nama}`;
+            document.getElementById('modal-customizer').classList.remove('hidden');
+        }
+        function tutupModalCustomizer() { document.getElementById('modal-customizer').classList.add('hidden'); }
+
+        function simpanRacikanKeKeranjang() {
+            const sugar = document.querySelector('input[name="sugar"]:checked').value;
+            const ice = document.querySelector('input[name="ice"]:checked').value;
+            const toppingRaw = document.getElementById('cust-topping').value.split('|');
+            const namaTopping = toppingRaw[0];
+            const hargaTopping = parseInt(toppingRaw[1]);
+
+            keranjang.push({
+                uid: Date.now(),
+                nama: produkSedangDiracik.nama,
+                hargaSatuan: produkSedangDiracik.harga + hargaTopping,
+                catatan: `${sugar}, ${ice}, ${namaTopping}`,
+                jumlah: 1
+            });
+
+            tutupModalCustomizer();
+            renderKeranjang();
+        }
+
+        // Mode Layanan (Makan Sini / Bawa Pulang / Antar Rumah)
+        function ubahModeLayanan(mode) {
+            modeLayanan = mode;
+            document.querySelectorAll('.mode-btn').forEach(b => b.className = "mode-btn text-zinc-400 hover:text-white font-semibold text-xs py-2 rounded-xl transition");
+            const activeId = mode === 'Dine-In' ? 'mode-dinein' : (mode === 'Takeaway' ? 'mode-takeaway' : 'mode-delivery');
+            document.getElementById(activeId).className = "mode-btn bg-emerald-500 text-zinc-950 font-extrabold text-xs py-2 rounded-xl transition";
+
+            const box = document.getElementById('box-info-layanan');
+            if(mode === 'Dine-In') {
+                box.innerHTML = `
+                    <label class="text-[11px] font-bold text-emerald-400 block">Pilih Nomor Meja Kafe</label>
+                    <select id="input-lokasi-detail" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                        <option value="Meja 01 (Indoor AC)">Meja 01 — Indoor AC</option>
+                        <option value="Meja 02 (Indoor AC)">Meja 02 — Indoor AC</option>
+                        <option value="Meja 05 (Outdoor Garden)">Meja 05 — Outdoor Garden</option>
+                        <option value="Meja 08 (VIP Sofa)">Meja 08 — VIP Sofa</option>
+                    </select>
+                `;
+            } else if(mode === 'Takeaway') {
+                box.innerHTML = `
+                    <label class="text-[11px] font-bold text-rose-400 block">Jam Pengambilan di Outlet</label>
+                    <input type="text" id="input-lokasi-detail" value="Ambil Segera (5-10 Menit)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                `;
+            } else {
+                box.innerHTML = `
+                    <label class="text-[11px] font-bold text-emerald-400 block">Alamat Rumah / Ruang Kelas Tujuan (+Ongkir Rp 5.000)</label>
+                    <input type="text" id="input-lokasi-detail" placeholder="Masukkan alamat lengkap / nama kelas..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                `;
+            }
+            kalkulasiTotal();
+        }
+
+        function renderKeranjang() {
+            const list = document.getElementById('cart-list');
+            document.getElementById('cart-badge').innerText = keranjang.length;
+
+            if(keranjang.length === 0) {
+                list.innerHTML = `<p class="text-xs text-zinc-500 text-center py-6">Belum ada minuman dipilih.</p>`;
+                kalkulasiTotal();
+                return;
+            }
+
+            list.innerHTML = '';
+            keranjang.forEach((item, idx) => {
+                list.innerHTML += `
+                    <div class="bg-zinc-950 border border-zinc-800 p-3 rounded-xl flex justify-between items-start gap-2">
+                        <div>
+                            <p class="text-xs font-bold text-white">${item.nama}</p>
+                            <p class="text-[10px] text-zinc-400 mt-0.5">${item.catatan}</p>
+                            <p class="text-xs font-extrabold text-rose-400 mt-1">${formatRp(item.hargaSatuan)}</p>
+                        </div>
+                        <button onclick="keranjang.splice(${idx}, 1); renderKeranjang();" class="text-zinc-500 hover:text-rose-500 text-xs p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            kalkulasiTotal();
+        }
+
+        function kalkulasiTotal() {
+            const subtotal = keranjang.reduce((s, i) => s + i.hargaSatuan, 0);
+            const ongkir = (modeLayanan === 'Delivery' && keranjang.length > 0) ? 5000 : 0;
+            const diskonVoucher = parseInt(document.getElementById('dropdown-voucher').value) || 0;
+            
+            let diskonKoin = 0;
+            if(document.getElementById('toggle-pakai-koin').checked && userGoogle) {
+                diskonKoin = userGoogle.koin * 100; // 1 koin = Rp 100
+            }
+
+            const totalPotongan = Math.min(subtotal + ongkir, diskonVoucher + diskonKoin);
+            const totalAkhir = Math.max(0, (subtotal + ongkir) - totalPotongan);
+
+            document.getElementById('teks-subtotal').innerText = formatRp(subtotal);
+            document.getElementById('teks-ongkir').innerText = formatRp(ongkir);
+            document.getElementById('teks-diskon').innerText = `- ${formatRp(totalPotongan)}`;
+            document.getElementById('teks-total').innerText = formatRp(totalAkhir);
+        }
+
+        // Halaman Promo & Klaim Voucher
+        function renderHalamanPromo() {
+            const cont = document.getElementById('daftar-voucher-container');
+            cont.innerHTML = '';
+            daftarVoucher.forEach((v, idx) => {
+                cont.innerHTML += `
+                    <div class="ticket-cutout bg-zinc-900 border border-zinc-800 p-6 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full ${v.diklaim ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}">
+                                ${v.diklaim ? 'Sudah Diklaim' : 'Tersedia'}
+                            </span>
+                            <h3 class="text-lg font-extrabold text-white mt-3">${v.judul}</h3>
+                            <p class="text-xs text-zinc-400 mt-1">${v.ket}</p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-dashed border-zinc-700 flex items-center justify-between">
+                            <span class="font-mono text-xs font-bold text-emerald-400">${v.kode}</span>
+                            <button onclick="klaimVoucher(${idx})" ${v.diklaim ? 'disabled' : ''} class="${v.diklaim ? 'bg-zinc-800 text-zinc-500' : 'bg-rose-500 hover:bg-rose-600 text-white'} text-xs font-bold px-4 py-2 rounded-xl transition">
+                                ${v.diklaim ? 'Tersimpan' : 'Klaim Voucher'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function klaimVoucher(idx) {
+            if(!userGoogle) {
+                alert('Masuk dengan Akun Google terlebih dahulu untuk mengklaim voucher diskon!');
+                bukaModalGoogle();
+                return;
+            }
+            daftarVoucher[idx].diklaim = true;
+            updateDropdownVoucher();
+            renderHalamanPromo();
+            alert(`Voucher "${daftarVoucher[idx].judul}" berhasil masuk ke akunmu!`);
+        }
+
+        function updateDropdownVoucher() {
+            const sel = document.getElementById('dropdown-voucher');
+            sel.innerHTML = `<option value="0">-- Tidak Pakai Voucher --</option>`;
+            daftarVoucher.filter(v => v.diklaim).forEach(v => {
+                sel.innerHTML += `<option value="${v.potong}">${v.judul} (-${formatRp(v.potong)})</option>`;
+            });
+        }
+
+        // Halaman Outlet
+        function renderHalamanOutlet() {
+            const cont = document.getElementById('daftar-outlet-container');
+            cont.innerHTML = '';
+            daftarOutlet.forEach(o => {
+                cont.innerHTML += `
+                    <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-3xl flex flex-col justify-between space-y-4">
+                        <div>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${o.status}</span>
+                            <h3 class="text-lg font-bold text-white mt-3">${o.nama}</h3>
+                            <p class="text-xs text-zinc-400 mt-1"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i>${o.alamat}</p>
+                        </div>
+                        <button onclick="outletAktif='${o.nama}'; document.getElementById('outlet-terpilih-badge').innerText='📍 '+outletAktif.split('—')[0]; bukaHalaman('menu');" class="w-full bg-zinc-950 hover:bg-emerald-500 text-zinc-300 hover:text-zinc-950 border border-zinc-800 font-bold text-xs py-3 rounded-xl transition">
+                            Pesan dari Outlet Ini ➔
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // Checkout & Kirim ke Barista Admin
+        function kirimPesananFinal() {
+            if(keranjang.length === 0) { alert('Keranjang masih kosong!'); return; }
+            const lokasi = document.getElementById('input-lokasi-detail').value;
+            if(!lokasi) { alert('Mohon isi detail meja / alamat pengantaran!'); return; }
+
+            const totalTeks = document.getElementById('teks-total').innerText;
+            const totalAngka = parseInt(totalTeks.replace(/[^0-9]/g, '')) || 0;
+
+            // Potong koin jika dipakai, dan beri reward koin baru (+10 koin)
+            if(userGoogle) {
+                if(document.getElementById('toggle-pakai-koin').checked) {
+                    userGoogle.koin = 0;
+                    document.getElementById('toggle-pakai-koin').checked = false;
+                }
+                userGoogle.koin += 10; // Cashback 10 koin setiap transaksi
+                updateInfoKoinUI();
+            }
+
+            pesananMasuk.push({
+                id: 'ZDS-' + Math.floor(1000 + Math.random() * 9000),
+                pemesan: userGoogle ? userGoogle.nama : "Pelanggan Umum",
+                layanan: `${modeLayanan} (${lokasi})`,
+                menu: keranjang.map(k => `${k.nama} [${k.catatan}]`).join('<br>'),
+                total: totalAngka,
+                status: 'Antrean'
+            });
+
+            alert(`Pesanan berhasil dikirim ke Barista Zidas Coffee!\nMode: ${modeLayanan} — ${lokasi}`);
+            keranjang = [];
+            renderKeranjang();
+            bukaHalaman('beranda');
+        }
+
+        // Render Dashboard Admin
+        function renderAdmin() {
+            const omzet = pesananMasuk.reduce((s, o) => s + o.total, 0);
+            document.getElementById('admin-omzet').innerText = formatRp(omzet);
+            document.getElementById('admin-jumlah-order').innerText = `${pesananMasuk.length} Pesanan`;
+            document.getElementById('admin-jumlah-member').innerText = userGoogle ? '1 Member Aktif' : '0 Member';
+
+            const tbody = document.getElementById('admin-tabel-order');
+            tbody.innerHTML = '';
+            if(pesananMasuk.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-zinc-500 text-xs">Belum ada pesanan masuk hari ini.</td></tr>`;
+                return;
+            }
+
+            pesananMasuk.forEach((p, i) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-zinc-950/50">
+                        <td class="p-3.5 font-mono text-xs text-emerald-400 font-bold">${p.id}</td>
+                        <td class="p-3.5"><span class="font-bold text-white block">${p.pemesan}</span><span class="text-xs text-rose-400">${p.layanan}</span></td>
+                        <td class="p-3.5 text-xs text-zinc-300 leading-relaxed">${p.menu}</td>
+                        <td class="p-3.5 font-extrabold text-white">${formatRp(p.total)}</td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">${p.status}</span></td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="pesananMasuk[${i}].status='Selesai & Diantar'; renderAdmin();" class="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs px-3 py-1.5 rounded-lg transition">Selesaikan</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Init
+        renderKatalog();
+        ubahModeLayanan('Dine-In');
+    </script>
+</body>
+</html>
